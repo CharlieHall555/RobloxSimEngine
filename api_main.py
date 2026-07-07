@@ -250,7 +250,7 @@ def health_check():
         "version": "1.0.0",
         "queue_size": job_queue.qsize(),
         "active_jobs": len(job_results)
-    }
+    } , 200
 
 
 @app.post("/execute", response_model=ExecutionResponse, status_code=200)

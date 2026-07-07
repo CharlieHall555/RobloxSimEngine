@@ -1,5 +1,6 @@
 antlr4-python3-runtime==4.13.2
 fastapi[all]
 uvicorn[standard]
+gunicorn
 python-dotenv
 pydantic>=2.0
