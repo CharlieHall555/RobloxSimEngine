@@ -8,5 +8,3 @@ from post_evaluation.Objective_Evaluation import (
 )
 from post_evaluation.Objective import Objective, FunctionCall
 from main import run
-
-

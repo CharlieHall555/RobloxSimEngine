@@ -20,7 +20,7 @@ class PrefixExpressionTest(unittest.TestCase):
         lexer = LuaLexer(input_stream)
         token_stream = CommonTokenStream(lexer)
         parser = LuaParser(token_stream)
-        parse_tree = parser.block()  # This returns a LuaParser.ChunkContext
+        parse_tree = parser.block()
         visitor = ASTBuilder()
         
         ast = visitor.visit(parse_tree)

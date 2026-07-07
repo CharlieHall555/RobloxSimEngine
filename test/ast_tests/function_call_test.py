@@ -8,7 +8,7 @@ from main import preprocess_lua_code, InputStream, LuaLexer , CommonTokenStream 
 from syntax_tree.ASTBuilder import ASTBuilder
 from syntax_tree.ASTNodes import (
     VarNode, StringNode, NumberNode, FunctionCallNode, ArgsNode,
-    AssignmentNode, AttributeNode
+    AssignmentNode, AttributeNode, MethodCallNode
 )
 from syntax_tree.ASTTraversal import FindFirstNodeOfType
 
@@ -75,11 +75,12 @@ class FunctionCallTest(unittest.TestCase):
     def test_method_call_colon(self):
         code = 'obj:method(123)'
         ast = self.parse(code)
-        expected = FunctionCallNode(
+        expected = MethodCallNode(
+            VarNode("obj"),
             AttributeNode(VarNode("obj"), StringNode("method")),
             ArgsNode([NumberNode(123)])
         )
-        actual = FindFirstNodeOfType(ast, FunctionCallNode)
+        actual = FindFirstNodeOfType(ast, MethodCallNode)
         self.assertEqual(str(expected), str(actual))
 
     def test_function_call_assigned(self):

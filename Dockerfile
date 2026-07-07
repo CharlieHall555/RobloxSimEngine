@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "gunicorn -w 2 -b 0.0.0.0:${PORT:-8000} api_main:app"]
+CMD ["sh", "-c", "gunicorn -w 2 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:${PORT:-8000} api_main:app"]

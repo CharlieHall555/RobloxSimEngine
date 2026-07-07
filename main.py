@@ -128,7 +128,12 @@ def run(code , datamodel_dict : typing.Optional[dict] = None , print_result=Fals
 
 lua_code = """
 x = Instance.new("Part")
-print(x.Position)
+x.Parent = game.Workspace
+
+print(#game.Workspace:GetChildren() , "hello")
+
+print(game.Workspace.Part1.Position)
+
 """
 starting_state = {
   "ClassName": "DataModel",

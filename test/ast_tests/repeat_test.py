@@ -77,7 +77,6 @@ class RepeatStructureTest(unittest.TestCase):
         visitor = ASTBuilder()
         ast = visitor.visit(parse_tree)
 
-        # only test outer RepeatNode exists and parses correctly
         outer_repeat = FindFirstNodeOfType(ast, RepeatNode)
         self.assertIsNotNone(outer_repeat)
         self.assertIsInstance(outer_repeat.block, BlockNode)
@@ -98,7 +97,6 @@ class RepeatStructureTest(unittest.TestCase):
         visitor = ASTBuilder()
         ast = visitor.visit(parse_tree)
 
-        # just test that a RepeatNode exists and ends in a variable condition
         repeat_node = FindFirstNodeOfType(ast, RepeatNode)
         self.assertEqual(str(repeat_node.condition), str(VarNode("done")))
 

@@ -3,7 +3,7 @@ from syntax_tree.ASTNodes import ASTNode , SequenceNode , BlockNode , AttributeN
 def FindFirstNodeOfType(Tree : ASTNode , TargetType : type):
     if isinstance(Tree , ASTNode) == False: return None
 
-    if type(Tree) is TargetType:
+    if isinstance(Tree, TargetType):
         return Tree
     
     elif type(Tree) is BlockNode:

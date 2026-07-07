@@ -27,7 +27,7 @@ def load_object(parent : Instance , object_to_load : dict):
     new : Instance = constructor()
     parent.add_child(new)
 
-    properties = object_to_load.get("Properties" , {})
+    properties = object_to_load.get("Properties") or {}
 
     for property_name , property_value in properties.items():
         print(property_name, property_value)
@@ -35,7 +35,7 @@ def load_object(parent : Instance , object_to_load : dict):
             new.set_value(property_name , property_value)
             print("set")
 
-    for each in object_to_load.get("Children" , []):
+    for each in object_to_load.get("Children") or []:
         load_object(new , each)
 
    

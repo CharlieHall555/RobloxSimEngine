@@ -36,3 +36,22 @@ class EvalTableTest(unittest.TestCase):
         success , message , state = run(code)
         memory_state : dict = state.memory[0]
         self.assertEqual(memory_state.get("y"), 5)
+
+    def test_length_operator_on_string(self):
+        code = """
+        x = #"hello"
+        """
+        success , message , state = run(code)
+        memory_state : dict = state.memory[0]
+        self.assertTrue(success)
+        self.assertEqual(memory_state.get("x"), 5)
+
+    def test_length_operator_on_get_children(self):
+        code = """
+        x = Instance.new("Part")
+        y = #x:GetChildren()
+        """
+        success , message , state = run(code)
+        memory_state : dict = state.memory[0]
+        self.assertTrue(success)
+        self.assertEqual(memory_state.get("y"), 0)

@@ -70,6 +70,8 @@ def eval_expression(state , exp : AST.ExpressionBase) -> typing.Union[LuaNumber 
                 return eval_negation(state , exp)
             elif exp.op.value == "not":
                 return eval_not(state , exp)
+            elif exp.op.value == "#":
+                return eval_length(state , exp)
             else:
                 raise RuntimeError(f"unexpected unary operation {exp.op.value}")
         elif isinstance(exp , AST.ExpressionNode):
@@ -312,6 +314,20 @@ def eval_negation(state , exp : AST.UnaryNode) -> LuaNumber:
             raise RuntimeError
     except:
         raise RuntimeError
+
+def eval_length(state , exp : AST.UnaryNode) -> LuaNumber:
+    value = eval_expression(state , exp.exp)
+
+    if isinstance(value , str):
+        return LuaNumber(len(value))
+
+    if isinstance(value , LuaTable):
+        return LuaNumber(len(value.values))
+
+    if isinstance(value , (list, tuple)):
+        return LuaNumber(len(value))
+
+    raise RuntimeError
 
 # ------------------- FUNCTION CALL -------------------  
 

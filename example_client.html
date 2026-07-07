@@ -3,448 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lua Evaluation API - Client Example</title>
+    <title>Lua API Example</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            background: linear-gradient(180deg, #f7f0e4 0%, #efe5d3 100%);
+            color: #1f1a17;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
+
+        .page {
+            max-width: 760px;
+            margin: 40px auto;
+            padding: 24px;
         }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
+
+        .card {
+            background: rgba(255, 252, 247, 0.96);
+            border: 1px solid #d8c9b4;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 18px 40px rgba(80, 52, 24, 0.12);
         }
-        
-        .header h1 {
-            margin-bottom: 10px;
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 2rem;
         }
-        
-        .content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 30px;
+
+        p {
+            margin: 0 0 16px;
+            line-height: 1.5;
         }
-        
-        .panel {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid #e9ecef;
+
+        .endpoint {
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f2e6d6;
+            font-size: 0.95rem;
+            word-break: break-all;
         }
-        
-        .panel h2 {
-            margin-bottom: 15px;
-            color: #667eea;
-        }
-        
+
         textarea {
             width: 100%;
-            min-height: 200px;
-            padding: 12px;
-            border: 2px solid #dee2e6;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
+            min-height: 220px;
+            box-sizing: border-box;
+            padding: 14px;
+            border: 1px solid #bca991;
+            border-radius: 10px;
             resize: vertical;
+            font: 14px/1.45 Consolas, "Courier New", monospace;
+            background: #fffdfa;
+            color: #1f1a17;
         }
-        
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
+
+        .model-input {
+            min-height: 260px;
+            margin-top: 14px;
         }
-        
-        .input-group {
-            margin-bottom: 15px;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #495057;
-        }
-        
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #dee2e6;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .button-group {
+
+        .controls {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 16px;
         }
-        
+
         button {
-            flex: 1;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
+            border: 0;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s;
         }
-        
-        .btn-execute {
-            background: #28a745;
-            color: white;
+
+        .run {
+            background: #205c45;
+            color: #fff;
         }
-        
-        .btn-execute:hover {
-            background: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+
+        .clear {
+            background: #d9c6ae;
+            color: #2b211a;
         }
-        
-        .btn-evaluate {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-evaluate:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-clear {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-clear:hover {
-            background: #5a6268;
-        }
-        
-        .output {
-            background: #212529;
-            color: #00ff00;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            min-height: 150px;
-            max-height: 400px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        
+
         .status {
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-weight: 600;
+            margin-top: 18px;
+            font-weight: 700;
         }
-        
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
+
+        .label {
+            display: block;
+            margin-top: 14px;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
-        
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
-        }
-        
-        .status.pending {
-            background: #fff3cd;
-            color: #856404;
-            border: 2px solid #ffeaa7;
-        }
-        
-        .examples {
-            margin-top: 15px;
-        }
-        
-        .example-btn {
-            padding: 8px 16px;
-            margin: 5px;
-            background: #e9ecef;
-            border: 2px solid #dee2e6;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
-        .example-btn:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
+
+        pre {
+            margin: 12px 0 0;
+            padding: 14px;
+            border-radius: 10px;
+            background: #191714;
+            color: #f5f1ea;
+            overflow-x: auto;
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🚀 Lua Evaluation API</h1>
-            <p>Execute and evaluate Lua code in real-time</p>
-        </div>
-        
-        <div class="content">
-            <div class="panel">
-                <h2>📝 Code Editor</h2>
-                <div class="input-group">
-                    <label>Lua Code</label>
-                    <textarea id="codeInput">local x = 10
-local y = 20
-print("The sum is: " .. (x + y))</textarea>
-                </div>
-                
-                <div class="input-group">
-                    <label>API Base URL</label>
-                    <input type="text" id="apiUrl" value="http://localhost:8080/eval-api">
-                </div>
-                
-                <div class="input-group">
-                    <label>Max Run Time (seconds)</label>
-                    <input type="number" id="maxRunTime" value="0.1" step="0.1" min="0.01" max="5">
-                </div>
-                
-                <div class="examples">
-                    <strong>Examples:</strong>
-                    <button class="example-btn" onclick="loadExample('loop')">For Loop</button>
-                    <button class="example-btn" onclick="loadExample('if')">If Statement</button>
-                    <button class="example-btn" onclick="loadExample('table')">Tables</button>
-                    <button class="example-btn" onclick="loadExample('function')">Functions</button>
-                </div>
-                
-                <div class="button-group">
-                    <button class="btn-execute" onclick="executeCode()">▶️ Execute</button>
-                    <button class="btn-evaluate" onclick="executeAndEvaluate()">✔️ Execute & Evaluate</button>
-                    <button class="btn-clear" onclick="clearOutput()">🗑️ Clear</button>
-                </div>
+    <main class="page">
+        <section class="card">
+            <h1>Roblox Sim Api</h1>
+            <div class="endpoint" id="endpointLabel"></div>
+                        <label class="label" for="codeInput">Lua Code</label>
+                        <textarea id="codeInput">local x = game.Workspace</textarea>
+                        <label class="label" for="dataModelInput">Data Model JSON</label>
+                        <textarea id="dataModelInput" class="model-input">{
+    "ClassName": "DataModel",
+    "Children": [
+        {
+            "ClassName": "Workspace",
+            "Children": [
+                {
+                    "ClassName": "Part",
+                    "Properties": {"Name": "Part1"}
+                },
+                {
+                    "ClassName": "Model",
+                    "Children": [
+                        {
+                            "ClassName": "Part"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}</textarea>
+            <div class="controls">
+                <button class="run" id="runButton">Run Code</button>
+                <button class="clear" id="clearButton">Clear Output</button>
             </div>
-            
-            <div class="panel">
-                <h2>📊 Output & Results</h2>
-                <div id="statusDisplay"></div>
-                <div class="output" id="output">Ready to execute code...</div>
-                
-                <h3 style="margin-top: 20px; margin-bottom: 10px;">🎯 Evaluation (Optional)</h3>
-                <div class="input-group">
-                    <label>Expected Output (comma-separated)</label>
-                    <input type="text" id="expectedOutput" value="The sum is: 30" placeholder="value1, value2, ...">
-                </div>
-                
-                <div class="input-group">
-                    <label>Expected State (JSON)</label>
-                    <textarea id="expectedState" style="min-height: 80px;">{"x": 10, "y": 20}</textarea>
-                </div>
-            </div>
-        </div>
-    </div>
+            <div class="status" id="statusText">Ready.</div>
+            <pre id="output">No response yet.</pre>
+        </section>
+    </main>
 
     <script>
-        const examples = {
-            loop: `for i = 1, 5 do
-    print("Count: " .. i)
-end`,
-            if: `local score = 85
+        const FALLBACK_API_BASE = "https://roblox-sim-api-production.up.railway.app/eval-api";
+        let executeUrl = `${FALLBACK_API_BASE}/execute`;
 
-if score >= 90 then
-    print("Grade: A")
-elseif score >= 80 then
-    print("Grade: B")
-else
-    print("Grade: C")
-end`,
-            table: `local fruits = {"apple", "banana", "cherry"}
+        const endpointLabel = document.getElementById("endpointLabel");
+        const codeInput = document.getElementById("codeInput");
+        const dataModelInput = document.getElementById("dataModelInput");
+        const statusText = document.getElementById("statusText");
+        const output = document.getElementById("output");
+        const runButton = document.getElementById("runButton");
+        const clearButton = document.getElementById("clearButton");
 
-for i, fruit in ipairs(fruits) do
-    print(i .. ": " .. fruit)
-end`,
-            function: `local function greet(name)
-    return "Hello, " .. name .. "!"
-end
+        async function loadClientConfig() {
+            try {
+                const response = await fetch("./client-config");
+                if (!response.ok) {
+                    throw new Error("config request failed");
+                }
 
-local message = greet("Student")
-print(message)`
-        };
+                const data = await response.json();
+                const apiBase = (data.api_base_url || FALLBACK_API_BASE).replace(/\/$/, "");
+                executeUrl = `${apiBase}/execute`;
+            } catch {
+                executeUrl = `${FALLBACK_API_BASE}/execute`;
+            }
 
-        function loadExample(type) {
-            document.getElementById('codeInput').value = examples[type];
-            clearOutput();
+            endpointLabel.textContent = `POST ${executeUrl}`;
         }
 
-        function getApiUrl() {
-            return document.getElementById('apiUrl').value;
+        function renderResponse(data) {
+            output.textContent = JSON.stringify(data, null, 2);
         }
 
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('statusDisplay');
-            statusDiv.className = `status ${type}`;
-            statusDiv.textContent = message;
-            statusDiv.style.display = 'block';
+        async function runCode() {
+            const code = codeInput.value.trim();
+            if (!code) {
+                statusText.textContent = "Enter some Lua code first.";
+                return;
+            }
+
+            let dataModel;
+            try {
+                dataModel = JSON.parse(dataModelInput.value);
+            } catch (error) {
+                statusText.textContent = "Data model JSON is invalid.";
+                output.textContent = error.message;
+                return;
+            }
+
+            statusText.textContent = "Running...";
+
+            try {
+                const response = await fetch(executeUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        code,
+                        max_run_time: 1,
+                        data_model: dataModel
+                    })
+                });
+
+                const data = await response.json();
+                renderResponse(data);
+                statusText.textContent = response.ok ? `Done: ${data.status}` : `Request failed: ${response.status}`;
+            } catch (error) {
+                statusText.textContent = "Request failed.";
+                output.textContent = error.message;
+            }
         }
 
         function clearOutput() {
-            document.getElementById('output').textContent = 'Ready to execute code...';
-            const statusDiv = document.getElementById('statusDisplay');
-            statusDiv.style.display = 'none';
+            statusText.textContent = "Ready.";
+            output.textContent = "No response yet.";
         }
 
-        function displayResult(data) {
-            const output = document.getElementById('output');
-            let text = '';
-            
-            text += `Status: ${data.status}\n`;
-            text += '\n--- Output ---\n';
-            if (data.output && data.output.length > 0) {
-                text += data.output.join('\n');
-            } else {
-                text += '(no output)';
-            }
-            
-            text += '\n\n--- Memory State ---\n';
-            if (data.memory && Object.keys(data.memory).length > 0) {
-                text += JSON.stringify(data.memory, null, 2);
-            } else {
-                text += '(no variables)';
-            }
-            
-            if (data.error) {
-                text += '\n\n--- Error ---\n';
-                text += data.error;
-            }
-            
-            if (data.passed !== undefined) {
-                text += '\n\n--- Evaluation ---\n';
-                text += `Passed: ${data.passed}\n`;
-                if (data.message) {
-                    text += `Message: ${data.message}`;
-                }
-            }
-            
-            output.textContent = text;
-        }
-
-        async function executeCode() {
-            const code = document.getElementById('codeInput').value;
-            const maxRunTime = parseFloat(document.getElementById('maxRunTime').value);
-            const apiUrl = getApiUrl();
-            
-            if (!code.trim()) {
-                showStatus('Please enter some code!', 'error');
-                return;
-            }
-            
-            showStatus('Executing...', 'pending');
-            
-            try {
-                const response = await fetch(`${apiUrl}/execute`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        code: code,
-                        max_run_time: maxRunTime
-                    })
-                });
-                
-                const data = await response.json();
-                displayResult(data);
-                
-                if (data.status === 'done') {
-                    showStatus('✅ Execution successful!', 'success');
-                } else {
-                    showStatus(`❌ Execution failed: ${data.status}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`❌ Network error: ${error.message}`, 'error');
-                document.getElementById('output').textContent = `Error: ${error.message}`;
-            }
-        }
-
-        async function executeAndEvaluate() {
-            const code = document.getElementById('codeInput').value;
-            const maxRunTime = parseFloat(document.getElementById('maxRunTime').value);
-            const expectedOutputStr = document.getElementById('expectedOutput').value;
-            const expectedStateStr = document.getElementById('expectedState').value;
-            const apiUrl = getApiUrl();
-            
-            if (!code.trim()) {
-                showStatus('Please enter some code!', 'error');
-                return;
-            }
-            
-            let expectedOutput = [];
-            if (expectedOutputStr.trim()) {
-                expectedOutput = expectedOutputStr.split(',').map(s => s.trim());
-            }
-            
-            let expectedState = {};
-            if (expectedStateStr.trim()) {
-                try {
-                    expectedState = JSON.parse(expectedStateStr);
-                } catch (e) {
-                    showStatus('❌ Invalid JSON in Expected State', 'error');
-                    return;
-                }
-            }
-            
-            showStatus('Executing and evaluating...', 'pending');
-            
-            try {
-                const response = await fetch(`${apiUrl}/execute-and-evaluate`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        code: code,
-                        max_run_time: maxRunTime,
-                        objective: {
-                            expected_output: expectedOutput,
-                            expected_state: expectedState
-                        }
-                    })
-                });
-                
-                const data = await response.json();
-                displayResult(data);
-                
-                if (data.passed) {
-                    showStatus('✅ All objectives met!', 'success');
-                } else {
-                    showStatus(`❌ Evaluation failed: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`❌ Network error: ${error.message}`, 'error');
-                document.getElementById('output').textContent = `Error: ${error.message}`;
-            }
-        }
+        runButton.addEventListener("click", runCode);
+        clearButton.addEventListener("click", clearOutput);
+        loadClientConfig();
     </script>
 </body>
 </html>

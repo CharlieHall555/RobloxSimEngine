@@ -10,7 +10,6 @@ from syntax_tree.ASTNodes import (
     BlockNode, SequenceNode, IfNode, ExpressionNode, OperatorNode,
     VarNode, AssignmentNode, NumberNode, StringNode
 )
-from syntax_tree.ASTTraversal import FindFirstNodeOfType
 
 
 class IfStatementTest(unittest.TestCase):
